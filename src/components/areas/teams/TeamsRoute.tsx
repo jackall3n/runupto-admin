@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
-import UserPage from "./UserPage/UserPage";
+import UserPage from "./TeamPage/TeamPage";
 import TeamsPage from "./TeamsPage/TeamsPage";
 
 export default function TeamsRoute({ match }: RouteComponentProps) {

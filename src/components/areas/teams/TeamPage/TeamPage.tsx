@@ -1,9 +1,9 @@
 import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import UserEventsTable from "./components/UserEventsTable/UserEventsTable";
 import Page from "../../../Page/Page";
+import TeamMembersTable from "./components/TeamMembersTable/TeamMembersTable";
+import TeamEventsTable from "./components/TeamEventsTable/TeamEventsTable";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,23 +15,20 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default () => {
   const classes = useStyles();
-  const user = {
-    name: 'Jack Allen'
+  const team = {
+    name: 'Run things'
   };
 
-
-  const { name } = user;
+  const { name } = team;
 
   return (
     <Page title={name}>
       <Grid container spacing={3}>
         <Grid item xs={6}>
-          <Paper className={classes.paper}>
-
-          </Paper>
+          <TeamMembersTable />
         </Grid>
         <Grid item xs={6}>
-          <UserEventsTable />
+          <TeamEventsTable />
         </Grid>
       </Grid>
     </Page>

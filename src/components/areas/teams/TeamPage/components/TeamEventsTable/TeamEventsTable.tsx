@@ -39,7 +39,7 @@ function UserEventDetail() {
   )
 }
 
-function UserEventsTable(props: RouteComponentProps) {
+function TeamEventsTable(props: RouteComponentProps) {
 
   const columns: Column<UserEvent>[] = [{
     title: 'Description',
@@ -68,4 +68,4 @@ function UserEventsTable(props: RouteComponentProps) {
   );
 }
 
-export default withRouter(UserEventsTable);
+export default withRouter(TeamEventsTable);

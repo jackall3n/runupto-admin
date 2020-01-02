@@ -44,7 +44,7 @@ const Page: React.FC<Props> = ({ children, title, rightPanel }) => {
 
   return (
     <>
-      <AppBar position="fixed" style={{
+      <AppBar position="fixed" color='primary' style={{
         width: `calc(100% - ${drawerWidth}px)`,
         marginLeft: drawerWidth,
       }}>
