@@ -6,5 +6,5 @@ COPY package.json .
 COPY yarn.lock .
 RUN yarn
 
-COPY ./src .
-COPY ./public .
+COPY ./src src
+COPY ./public public
