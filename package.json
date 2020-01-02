@@ -21,6 +21,7 @@
     "typescript": "~3.7.2"
   },
   "scripts": {
+    "start:docker": "docker-compose up",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
