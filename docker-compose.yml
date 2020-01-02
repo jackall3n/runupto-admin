@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  run-up-admin:
+    container_name: run-up-admin
+    restart: always
+    build: .
+    command: yarn start
+    environment:
+      PORT: 80
+      STRAVA_CLIENT_URL: https://admin.zorp.co
+    expose:
+      - 80
