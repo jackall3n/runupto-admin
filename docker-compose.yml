@@ -8,7 +8,7 @@ services:
     command: yarn start
     environment:
       PORT: 80
-      HTTPS: true
+      HTTPS: "true"
       VIRTUAL_HOST: admin.zorp.co
       LETSENCRYPT_HOST: admin.zorp.co
       LETSENCRYPT_EMAIL: hello@jackallen.me
