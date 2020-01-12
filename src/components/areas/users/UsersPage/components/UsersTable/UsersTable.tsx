@@ -1,32 +1,33 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import MaterialTable, { Column } from "material-table";
+import { User } from "../../../../../../types/UserTypes";
 
-function createUser(id: number, name: string) {
-  return { id, name };
+interface Props extends RouteComponentProps {
+  users: User[];
+  isFetching: boolean;
 }
 
-const users = [
-  createUser(1, 'Jack Allen'),
-  createUser(2, 'Kevin Betts'),
-];
-
-type User = {
-  id: number;
-  name: string;
-}
-
-function UsersTable(props: RouteComponentProps) {
+function UsersTable({ users, history, isFetching }: Props) {
   const columns: Column<User>[] = [{
-    title: 'Name',
-    field: 'name'
+    title: 'First',
+    field: 'name.first'
+  },{
+    title: 'Last',
+    field: 'name.last',
+    defaultSort: 'asc',
+    customSort: ({ name: { last: last1}}, { name: { last: last2 }}) => last1.localeCompare(last2)
   }];
 
-  const onRowClick = (e: any, user: User | undefined) => props.history.push(`/users/${user?.id}`);
+  const onRowClick = (e: any, user: User | undefined) => history.push(`/users/${user?.id}`);
 
   return (
     <>
-      <MaterialTable<User> title="Users" columns={columns} data={users} onRowClick={onRowClick} />
+      <MaterialTable<User> isLoading={isFetching}
+                           title="Users"
+                           columns={columns}
+                           data={users}
+                           onRowClick={onRowClick} />
     </>
   );
 }

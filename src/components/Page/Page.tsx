@@ -3,6 +3,9 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import { useMenu } from "../../contexts/MenuContext";
 
 interface Props {
   title?: string;
@@ -19,36 +22,40 @@ const useStyles = makeStyles((theme: Theme) =>
     title: {
       flexGrow: 1,
     },
-    paper: {
-      padding: theme.spacing(2),
+    appBar: {
+      [theme.breakpoints.up('md')]: {
+        display: 'flex',
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: drawerWidth,
+      }
     },
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-    },
-    chips: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    chip: {
-      margin: 2,
-    },
-    noLabel: {
-      marginTop: theme.spacing(3),
-    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+      [theme.breakpoints.up('md')]: {
+        display: 'none',
+      },
+    }
   }),
 );
 
 const Page: React.FC<Props> = ({ children, title, rightPanel }) => {
   const classes = useStyles();
 
+  const { toggleMenu } = useMenu();
+
   return (
     <>
-      <AppBar position="fixed" color='primary' style={{
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-      }}>
+      <AppBar position="fixed" color='primary' className={classes.appBar}>
         <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            className={classes.menuButton}
+            onClick={() => toggleMenu(true)}
+          >
+            <MenuIcon />
+          </IconButton>
           <Typography variant="h6" noWrap className={classes.title}>
             {title}
           </Typography>

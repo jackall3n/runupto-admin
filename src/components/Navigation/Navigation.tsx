@@ -11,6 +11,8 @@ import Drawer from "@material-ui/core/Drawer";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
 import { Typography } from "@material-ui/core";
+import Hidden from "@material-ui/core/Hidden";
+import { useMenu } from "../../contexts/MenuContext";
 
 const drawerWidth = 240;
 
@@ -18,10 +20,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
-    },
-    appBar: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
     },
     drawer: {
       width: drawerWidth,
@@ -42,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(3),
     },
     navItem: {
-      '&:visited, &:active' : {
+      '&:visited, &:active': {
         color: 'black',
         textDecoration: 'none'
       }
@@ -61,15 +59,10 @@ const routes = [
 const Navigation = () => {
   const classes = useStyles();
 
-  return (
-    <Drawer
-      className={classes.drawer}
-      variant="permanent"
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-      anchor="left"
-    >
+  const { menuOpen, toggleMenu } = useMenu();
+
+  const drawer = (
+    <>
       <div className={classes.toolbar}>
         <Typography variant="h6">
           Zorp Admin
@@ -78,7 +71,7 @@ const Navigation = () => {
       <Divider />
       <List>
         {routes.map((route) => (
-          <NavLink to={route.path} key={route.path} className={classes.navItem}>
+          <NavLink to={route.path} key={route.path} className={classes.navItem} onClick={() => toggleMenu(false)}>
             <ListItem button>
               <ListItemIcon>
                 {route.icon}
@@ -88,7 +81,40 @@ const Navigation = () => {
           </NavLink>
         ))}
       </List>
-    </Drawer>
+    </>
+  );
+
+  return (
+    <nav>
+      <Hidden mdUp implementation="css">
+        <Drawer
+          variant="temporary"
+          anchor={'left'}
+          open={menuOpen}
+          onClose={() => toggleMenu(false)}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </Hidden>
+      <Hidden smDown implementation="js">
+        <Drawer
+          className={classes.drawer}
+          variant="permanent"
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          anchor="left"
+        >
+          {drawer}
+        </Drawer>
+      </Hidden>
+    </nav>
   )
 };
 

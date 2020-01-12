@@ -1,8 +1,15 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Chip } from "@material-ui/core";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import MaterialTable, { Column } from "material-table";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+import DateFnsUtils from '@date-io/date-fns';
+import { Event } from '../../../../../../types/EventTypes';
+
+const dateFns = new DateFnsUtils();
 
 const useStyles = makeStyles(theme => ({
   table: {
@@ -25,55 +32,91 @@ const useStyles = makeStyles(theme => ({
 * Live dashboard of stats would be great. How far in total, who’s completed etc.
 * */
 
+const options = [
+  'View',
+  'Edit',
+  'Duplicate',
+  'Delete'
+];
+
+const ITEM_HEIGHT = 48;
+
 interface Props extends RouteComponentProps {
   title: string;
-  events: Event[]
+  events?: Event[];
+  isFetching?: boolean;
 }
 
-type Event = {
-  id: number;
-  description: string;
-  types: string[];
-  start: string;
-  end: string;
-  participants: number;
-}
-
-function EventsTable(props: Props) {
+function EventsTable({ title, events = [], isFetching, history }: Props) {
   const classes = useStyles();
 
   const columns: Column<Event>[] = [{
     title: 'Description',
-    field: 'description'
+    field: 'summary.description'
   }, {
     title: 'Types',
-    render: ({ types }) => (
+    render: ({ summary: { activity_types } }) => (
       <div className={classes.types}>
-        {types.map(type => <Chip key={type} size="small" label={type} />)}
+        {activity_types.map(type => <Chip key={type} size="small" label={type} />)}
       </div>
     )
   }, {
     title: 'Start',
-    field: 'start',
+    render: ({ summary: { duration } }) => dateFns.format(dateFns.date(duration.start), 'dd MMM yyyy')
   }, {
     title: 'End',
-    field: 'end',
+    render: ({ summary: { duration } }) => dateFns.format(dateFns.date(duration.end), 'dd MMM yyyy')
   }, {
     title: 'Participants',
     type: 'numeric',
-    field: 'participants'
+    field: 'summary.participants.length'
   }];
 
-  const onRowClick = (e: any, event: Event | undefined) => props.history.push(`/events/${event?.id}`);
+  const onRowClick = (e: any, event: Event | undefined) => history.push(`/events/${event?.id}`);
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <>
-      <MaterialTable<Event> localization={{
+      <MaterialTable<Event> isLoading={isFetching} localization={{
         body: {
           emptyDataSourceMessage: 'There is nothing to display'
         }
-      }} options={{ showEmptyDataSourceMessage: true }} title={props.title} columns={columns} data={props.events}
+      }} options={{ showEmptyDataSourceMessage: true, actionsColumnIndex: -1 }}
+                            actions={[{
+                              icon: () => <MoreVertIcon aria-controls="long-menu" />,
+                              tooltip: 'Options',
+                              onClick: handleClick
+                            }]} title={title} columns={columns} data={events}
                             onRowClick={onRowClick} />
+      <Menu
+        id="long-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          style: {
+            maxHeight: ITEM_HEIGHT * 4.5,
+            width: 200,
+          },
+        }}
+      >
+        {options.map(option => (
+          <MenuItem key={option} onClick={handleClose}>
+            {option}
+          </MenuItem>
+        ))}
+      </Menu>
     </>
   );
 }

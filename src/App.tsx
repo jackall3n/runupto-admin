@@ -1,9 +1,5 @@
 import React from 'react';
 import Routes from "./components/Routes/Routes";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import Navigation from "./components/Navigation/Navigation";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 
@@ -13,10 +9,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
-    },
-    appBar: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
     },
     drawer: {
       width: drawerWidth,

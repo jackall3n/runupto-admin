@@ -2,16 +2,7 @@ import React from 'react';
 import { Checkbox } from "@material-ui/core";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import MaterialTable, { Column } from "material-table";
-import Button from "@material-ui/core/Button";
-
-function createData(id: number, description: string, progress: number, goal: number, completed: boolean) {
-  return { id, description, progress, goal, completed };
-}
-
-const events = [
-  createData(1, 'Run up to Christmas', 35, 100, false),
-  createData(2, 'Swim up to Christmas', 103, 100, true),
-];
+import { Event } from "src/types/EventTypes";
 
 /*
 * Events require us to set them up at any point, and the back end allowing us to be in charge of a range of
@@ -23,38 +14,26 @@ const events = [
 * Live dashboard of stats would be great. How far in total, who’s completed etc.
 * */
 
-type UserEvent = {
-  id: number;
-  description: string;
-  progress: number;
-  goal: number;
-  completed: boolean;
+interface Props extends RouteComponentProps {
+  events: Event[];
 }
 
-function UserEventDetail() {
-  return (
-    <div style={{ margin: '1rem' }}>
-      <Button>Manual Upload</Button>
-    </div>
-  )
-}
+function UserEventsTable({ history, events }: Props) {
 
-function UserEventsTable(props: RouteComponentProps) {
-
-  const columns: Column<UserEvent>[] = [{
+  const columns: Column<Event>[] = [{
     title: 'Description',
-    field: 'description'
+    field: 'summary.description'
   }, {
     title: 'Distance',
     type: 'numeric',
-    render: data => `${data.progress} / ${data.goal}`
+    render: data => ''//`${data.progress} / ${data.goal}`
   }, {
     title: 'Completed',
     type: 'numeric',
-    render: data => <Checkbox size='small' disabled checked={data.completed} />
+    render: data => <Checkbox size='small' disabled checked={false} />
   }];
 
-  const onClick = (e: any, r: any, t?: () => void) => t?.();
+  const onClick = (e: any, r: any) => history.push(`/events/${r.id}`);
 
   return (
     <>
@@ -62,7 +41,6 @@ function UserEventsTable(props: RouteComponentProps) {
                      columns={columns}
                      data={events}
                      onRowClick={onClick}
-                     detailPanel={UserEventDetail}
       />
     </>
   );
