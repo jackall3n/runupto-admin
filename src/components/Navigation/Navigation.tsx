@@ -86,7 +86,7 @@ const Navigation = () => {
 
   return (
     <nav>
-      <Hidden mdUp implementation="css">
+      <Hidden lgUp implementation="css">
         <Drawer
           variant="temporary"
           anchor={'left'}
@@ -102,7 +102,7 @@ const Navigation = () => {
           {drawer}
         </Drawer>
       </Hidden>
-      <Hidden smDown implementation="js">
+      <Hidden mdDown implementation="js">
         <Drawer
           className={classes.drawer}
           variant="permanent"
